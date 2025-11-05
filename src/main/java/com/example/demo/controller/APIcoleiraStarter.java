@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.Models.AnimalModel;
 import com.example.demo.Models.SituacaoAnimalModel;
 import com.example.demo.repo.AnimalRepo;
+import org.kie.api.KieServices;
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,26 +34,26 @@ public class APIcoleiraStarter {
         SituacaoAnimalModel situacaoAnimalModel = situacaoAnimalRepo.findById(a).orElse(null);
         AnimalModel animalModel = animalRepo.findAnimalModelBycoleiraid(idColeira);
 
-        System.out.println("\n\n");
-        System.out.println(animalModel.getSituacaoAnimal().toString());
-        System.out.println("\n\n");
+//        System.out.println("\n\n");
+//        System.out.println(animalModel.getSituacaoAnimal().toString());
+//        System.out.println("\n\n");
+//
+//        System.out.println("#############################");
+//        animalModel.getSituacaoAnimal().stream().forEach(l-> System.out.println(l.getBatimentos()));
+//        System.out.println("#############################");
+        if (situacaoAnimalModel == null)
+        {
+            return ResponseEntity.notFound().build();
+        }
 
-        System.out.println("#############################");
-        animalModel.getSituacaoAnimal().stream().forEach(l-> System.out.println(l.getBatimentos()));
-        System.out.println("#############################");
-//        if (situacaoAnimalModel == null)
-//        {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        System.out.println("\n\n\n teste");
-//        System.out.println(situacaoAnimalModel.getAnimalModel().getNome());
-//        System.out.println("teste \n\n\n");
-//
-//    	KieContainer kieContainer = KieServices.Factory.get().getKieClasspathContainer();
-//        KieSession kieSession = kieContainer.newKieSession("session");
-//        kieSession.insert(situacaoAnimalModel);
-//		kieSession.fireAllRules();
+        System.out.println("\n\n\n teste");
+        System.out.println(situacaoAnimalModel.getBatimentos());
+        System.out.println("teste \n\n\n");
+
+        KieContainer kieContainer = KieServices.Factory.get().getKieClasspathContainer();
+        KieSession kieSession = kieContainer.newKieSession("session");
+        kieSession.insert(situacaoAnimalModel);
+		kieSession.fireAllRules();
 
         return ResponseEntity.ok().build();
 
