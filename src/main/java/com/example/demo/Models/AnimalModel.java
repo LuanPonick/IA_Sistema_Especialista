@@ -19,7 +19,7 @@ import java.util.Set;
 public class AnimalModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_animal;
+    private long id_animal;
     private String nome;
     private Date idade;
     @Column(name = "coleira_id")

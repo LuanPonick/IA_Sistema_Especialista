@@ -15,9 +15,6 @@ import com.example.demo.repo.SituacaoAnimalRepo;
 
 import jakarta.annotation.Resource;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @RestController
 public class APIcoleiraStarter {
 
@@ -29,11 +26,9 @@ public class APIcoleiraStarter {
 
     @PatchMapping("startdetection/{idColeira}")
         public ResponseEntity<Resource> updateResourcePartial(@PathVariable int idColeira) {
-        long a = 1;
 
-        SituacaoAnimalModel situacaoAnimalModel = situacaoAnimalRepo.findById(a).orElse(null);
         AnimalModel animalModel = animalRepo.findAnimalModelBycoleiraid(idColeira);
-
+        SituacaoAnimalModel situacaoAnimalModel = situacaoAnimalRepo.findById(animalModel.getId_animal()).orElse(null);
 //        System.out.println("\n\n");
 //        System.out.println(animalModel.getSituacaoAnimal().toString());
 //        System.out.println("\n\n");
