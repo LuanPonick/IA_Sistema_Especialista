@@ -7,5 +7,5 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 @RepositoryRestController
 public interface AnimalRepo extends JpaRepository<AnimalModel, Long> {
 
-    AnimalModel findAnimalModelBycoleiraid(int coleiraid);
+    AnimalModel findAnimalModelBycoleiraid(long coleiraid);
 }

@@ -1,24 +1,46 @@
 package org.example
 
 import com.example.demo.Models.SituacaoAnimalModel;
-import com.example.demo.Models.RulerModel;
+import com.example.demo.Models.RuleModel;
+import com.example.demo.Models.AnimalModel;
 
-rule "Verifica batimentos OK"
+
+rule "Dado Já analisado"
 no-loop true
 dialect "java"
-	when
-		$SituacaoAnimalModel: SituacaoAnimalModel(batimentos < 160)
-	then
-	    System.out.println("\n esta normal \n");
-	    drools.halt();
+    when
+        $SituacaoAnimalModel: SituacaoAnimalModel(situacao_ja_analisada == true)
+        $RuleModel: RuleModel()
+    then
+        modify($RuleModel) {
+            setNumeroTentativas($RuleModel.getNumeroTentativas() + 1)
+        };
+        System.out.println("\n dado já analisado \n");
 end
 
-rule "Batimentos fora do normal"
+rule "Limite de vezes executado"
+no-loop true
+dialect "java"
+    when
+        $RuleModel: RuleModel(numeroTentativas >= 3)
+        $AnimalModel: AnimalModel()
+    then
+        modify($AnimalModel) {
+           setColeira_on(false)
+        };
+        System.out.println("\n Limite de vezes executado \n");
+        drools.halt();
+
+
+end
+
+rule "Coleira desativada"
 no-loop true
 dialect "java"
 	when
-		$SituacaoAnimalModel: SituacaoAnimalModel(batimentos > 160)
+		$AnimalModel: AnimalModel(Coleira_on == false)
 	then
-	    System.out.println("\n\n\n\n esta fora normal\n\n\n\n");
+	    System.out.println("\n Coleira desativada \n");
+	    drools.halt();
 end
 

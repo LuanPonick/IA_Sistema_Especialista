@@ -23,7 +23,7 @@ public class AnimalModel implements Serializable {
     private String nome;
     private Date idade;
     @Column(name = "coleira_id")
-    private int coleiraid;
+    private long coleiraid;
     private boolean coleira_on;
     private int limite_tentativas;
     private int contador_tentativa;
@@ -33,4 +33,7 @@ public class AnimalModel implements Serializable {
     @OneToMany(mappedBy = "animal")
     private Set<SituacaoAnimalModel> situacaoAnimal = new HashSet<>();
 
+    public boolean getColeira_on (){
+        return coleira_on;
+    }
 }

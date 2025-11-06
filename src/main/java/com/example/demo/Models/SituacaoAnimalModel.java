@@ -7,11 +7,12 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-@Setter
-@Getter
+
 @Data
 @Entity
 @Table(name = "situacao")
+@Setter
+@Getter
 public class SituacaoAnimalModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +27,8 @@ public class SituacaoAnimalModel implements Serializable {
     private int presao_arterial_diastolica;
     private int temperatura;
     private boolean situacao_ja_analisada;
+
+    public void setColeira_on(boolean b) {
+        this.situacao_ja_analisada = b;
+    }
 }

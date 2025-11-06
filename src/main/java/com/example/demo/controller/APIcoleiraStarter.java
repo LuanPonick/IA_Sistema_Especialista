@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.Models.AnimalModel;
+import com.example.demo.Models.RuleModel;
 import com.example.demo.Models.SituacaoAnimalModel;
 import com.example.demo.repo.AnimalRepo;
+import com.example.demo.repo.SituacaoAnimalRepo;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -11,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.example.demo.repo.SituacaoAnimalRepo;
 
 import jakarta.annotation.Resource;
 
@@ -25,33 +26,38 @@ public class APIcoleiraStarter {
     AnimalRepo animalRepo;
 
     @PatchMapping("startdetection/{idColeira}")
-        public ResponseEntity<Resource> updateResourcePartial(@PathVariable int idColeira) {
+        public ResponseEntity<Resource> updateResourcePartial(@PathVariable int idColeira) throws InterruptedException {
+
+        int contador = 0;
 
         AnimalModel animalModel = animalRepo.findAnimalModelBycoleiraid(idColeira);
         SituacaoAnimalModel situacaoAnimalModel = situacaoAnimalRepo.findById(animalModel.getId_animal()).orElse(null);
-//        System.out.println("\n\n");
-//        System.out.println(animalModel.getSituacaoAnimal().toString());
-//        System.out.println("\n\n");
-//
-//        System.out.println("#############################");
-//        animalModel.getSituacaoAnimal().stream().forEach(l-> System.out.println(l.getBatimentos()));
-//        System.out.println("#############################");
-        if (situacaoAnimalModel == null)
-        {
+        RuleModel ruleModel = new RuleModel();
+
+        if (situacaoAnimalModel == null) {
             return ResponseEntity.notFound().build();
         }
 
-        System.out.println("\n\n\n teste");
-        System.out.println(situacaoAnimalModel.getBatimentos());
-        System.out.println("teste \n\n\n");
+        do {
+            KieContainer kieContainer = KieServices.Factory.get().getKieClasspathContainer();
+            KieSession kieSession = kieContainer.newKieSession("session");
 
-        KieContainer kieContainer = KieServices.Factory.get().getKieClasspathContainer();
-        KieSession kieSession = kieContainer.newKieSession("session");
-        kieSession.insert(situacaoAnimalModel);
-		kieSession.fireAllRules();
+            kieSession.insert(situacaoAnimalModel);
+            kieSession.insert(animalModel);
+            kieSession.insert(ruleModel);
+
+            kieSession.fireAllRules();
+
+            contador++;
+            Thread.sleep(1000);
+        }while (animalModel.getColeira_on() && contador < 6);
+
+        if (contador == 6){
+            System.out.println("*****************************");
+            System.out.println("logica falhou");
+            System.out.println("*****************************");
+        }
 
         return ResponseEntity.ok().build();
-
-
     }
 }
