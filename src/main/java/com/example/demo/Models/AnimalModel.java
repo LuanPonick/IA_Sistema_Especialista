@@ -25,13 +25,11 @@ public class AnimalModel implements Serializable {
     @Column(name = "coleira_id")
     private long coleiraid;
     private boolean coleira_on;
-    private int limite_tentativas;
-    private int contador_tentativa;
     private int porte;
-    private boolean idade_avancada;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "animal")
     private Set<SituacaoAnimalModel> situacaoAnimal = new HashSet<>();
+    private int maturidade;
 
     public boolean getColeira_on (){
         return coleira_on;

@@ -10,16 +10,19 @@ public class RuleModel {
     private int temperaturaBaixa;
 
     private int batimentosCaridiacosAlta;
-    private int batimentosCaridiacosBaixa;
+    private int batimentosCaridiacosBaixo;
 
     private int presaoArterialSistolicaAlta;
     private int presaoArterialSistolicaBaixa;
 
-    private int presaoArterialdastolicaAlta;
-    private int presaoArterialdastolicaBaixa;
+    private int presaoArterialDiastolicaAlta;
+    private int presaoArterialDiastolicaBaixa;
 
     private int numeroTentativas;
     private boolean coleiraOn;
+
+    private int limite_tentativas;
+    private int contador_tentativa;
 
     public RuleModel(){
 

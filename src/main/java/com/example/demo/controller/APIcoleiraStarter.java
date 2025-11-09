@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.Models.AnimalModel;
-import com.example.demo.Models.RuleModel;
-import com.example.demo.Models.SituacaoAnimalModel;
+import com.example.demo.Models.*;
 import com.example.demo.repo.AnimalRepo;
+import com.example.demo.repo.AnomaliaRepo;
 import com.example.demo.repo.SituacaoAnimalRepo;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
@@ -25,38 +24,51 @@ public class APIcoleiraStarter {
     @Autowired
     AnimalRepo animalRepo;
 
+    @Autowired
+    AnomaliaRepo anomaliaRepo;
+
     @PatchMapping("startdetection/{idColeira}")
         public ResponseEntity<Resource> updateResourcePartial(@PathVariable int idColeira) throws InterruptedException {
 
-        int contador = 0;
+
 
         AnimalModel animalModel = animalRepo.findAnimalModelBycoleiraid(idColeira);
         SituacaoAnimalModel situacaoAnimalModel = situacaoAnimalRepo.findById(animalModel.getId_animal()).orElse(null);
+        AnomaliaModelAgrupador anomaliaModelAgrupador = new AnomaliaModelAgrupador();
+
         RuleModel ruleModel = new RuleModel();
 
         if (situacaoAnimalModel == null) {
             return ResponseEntity.notFound().build();
         }
+        new Thread(() -> {
+            try{
+                System.out.println("\n" + Thread.currentThread().getName() + "\n");
+                situacaoAnimalModel.setSituacao_ja_analisada(false);
+                do {
+                    KieContainer kieContainer = KieServices.Factory.get().getKieClasspathContainer();
+                    KieSession kieSession = kieContainer.newKieSession("session");
 
-        do {
-            KieContainer kieContainer = KieServices.Factory.get().getKieClasspathContainer();
-            KieSession kieSession = kieContainer.newKieSession("session");
+                    kieSession.insert(situacaoAnimalModel);
+                    kieSession.insert(animalModel);
+                    kieSession.insert(anomaliaModelAgrupador);
+                    kieSession.insert(ruleModel);
 
-            kieSession.insert(situacaoAnimalModel);
-            kieSession.insert(animalModel);
-            kieSession.insert(ruleModel);
+                    kieSession.fireAllRules();
+                    System.out.println(anomaliaModelAgrupador.anomaliaModels.toString());
+                    Thread.sleep(5000);
+                    System.out.println("--------------");
 
-            kieSession.fireAllRules();
+                    anomaliaRepo.saveAll(anomaliaModelAgrupador.anomaliaModels);
+                    anomaliaModelAgrupador.anomaliaModels.clear();
+                    situacaoAnimalRepo.save(situacaoAnimalModel);
 
-            contador++;
-            Thread.sleep(1000);
-        }while (animalModel.getColeira_on() && contador < 6);
-
-        if (contador == 6){
-            System.out.println("*****************************");
-            System.out.println("logica falhou");
-            System.out.println("*****************************");
-        }
+                    situacaoAnimalModel.getId_situacao();
+                }while (animalModel.getColeira_on());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
 
         return ResponseEntity.ok().build();
     }

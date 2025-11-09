@@ -3,20 +3,8 @@ package org.example
 import com.example.demo.Models.SituacaoAnimalModel;
 import com.example.demo.Models.RuleModel;
 import com.example.demo.Models.AnimalModel;
-
-
-rule "Dado Já analisado"
-no-loop true
-dialect "java"
-    when
-        $SituacaoAnimalModel: SituacaoAnimalModel(situacao_ja_analisada == true)
-        $RuleModel: RuleModel()
-    then
-        modify($RuleModel) {
-            setNumeroTentativas($RuleModel.getNumeroTentativas() + 1)
-        };
-        System.out.println("\n dado já analisado \n");
-end
+import com.example.demo.Models.AnomaliaModel;
+import com.example.demo.Models.AnomaliaModelAgrupador;
 
 rule "Limite de vezes executado"
 no-loop true
@@ -28,10 +16,22 @@ dialect "java"
         modify($AnimalModel) {
            setColeira_on(false)
         };
-        System.out.println("\n Limite de vezes executado \n");
+        System.out.println("\n" + drools.getRule().getName() + "\n");
         drools.halt();
+end
 
-
+rule "Dado Já analisado"
+no-loop true
+dialect "java"
+    when
+        $SituacaoAnimalModel: SituacaoAnimalModel(situacao_ja_analisada == true)
+        $RuleModel: RuleModel()
+    then
+        modify($RuleModel) {
+            setNumeroTentativas($RuleModel.getNumeroTentativas() + 1)
+        };
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+        drools.halt();
 end
 
 rule "Coleira desativada"
@@ -40,7 +40,177 @@ dialect "java"
 	when
 		$AnimalModel: AnimalModel(Coleira_on == false)
 	then
-	    System.out.println("\n Coleira desativada \n");
+	    System.out.println("\n" + drools.getRule().getName() + "\n");
 	    drools.halt();
 end
 
+//R2
+
+rule "Animal de recém nascido"
+no-loop true
+dialect "java"
+    when
+        $AnimalModel: AnimalModel(maturidade == 1)
+        $rule: RuleModel()
+    then
+        modify($rule) {
+            setBatimentosCaridiacosAlta(160),
+            setBatimentosCaridiacosBaixo(120),
+            setTemperaturaBaixa(38),
+            setTemperaturaAlta(39),
+            setPresaoArterialSistolicaAlta(140),
+            setPresaoArterialSistolicaBaixa(90),
+            setPresaoArterialDiastolicaAlta(50),
+            setPresaoArterialDiastolicaBaixa(90)
+        };
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+end
+
+rule "Animal de pequeno porte"
+no-loop true
+dialect "java"
+    when
+        $AnimalModel: AnimalModel( porte == 1 && (maturidade == 2 || maturidade == 3) )
+        $rule: RuleModel()
+    then
+        modify($rule) {
+            setBatimentosCaridiacosAlta(140),
+            setBatimentosCaridiacosBaixo(100),
+            setTemperaturaBaixa(38),
+            setTemperaturaAlta(39),
+            setPresaoArterialSistolicaAlta(140),
+            setPresaoArterialSistolicaBaixa(90),
+            setPresaoArterialDiastolicaAlta(50),
+            setPresaoArterialDiastolicaBaixa(90)
+        };
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+end
+
+rule "Animal de medio e grande porte"
+no-loop true
+dialect "java"
+    when
+        $AnimalModel: AnimalModel( porte == 2 || porte == 3 && (maturidade == 2 || maturidade == 3) )
+        $rule: RuleModel()
+    then
+        modify($rule) {
+            setBatimentosCaridiacosAlta(80),
+            setBatimentosCaridiacosBaixo(60),
+            setTemperaturaBaixa(38),
+            setTemperaturaAlta(39),
+            setPresaoArterialSistolicaAlta(140),
+            setPresaoArterialSistolicaBaixa(90),
+            setPresaoArterialDiastolicaAlta(50),
+            setPresaoArterialDiastolicaBaixa(90)
+        };
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+end
+
+//R3
+rule "Verificação de batimentos cardíacos elevados"
+no-loop true
+dialect "java"
+    when
+        $rule: RuleModel()
+        $SituacaoAnimalModel: SituacaoAnimalModel( batimentos > $rule.batimentosCaridiacosAlta)
+        $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
+        $AnimalModel: AnimalModel()
+    then
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"batimentos altos") );
+
+        //  update($AnomaliaModelAgrupador);
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+end
+
+rule "Verificação de batimentos cardíacos baixos"
+no-loop true
+dialect "java"
+    when
+        $rule: RuleModel()
+        $SituacaoAnimalModel: SituacaoAnimalModel( batimentos < $rule.batimentosCaridiacosBaixo)
+        $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
+        $AnimalModel: AnimalModel()
+    then
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"batimentos baixos") );
+
+        // update($AnomaliaModelAgrupador);
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+end
+
+//R4
+
+rule "Verifica temperatura alta"
+no-loop true
+dialect "java"
+    when
+        $rule: RuleModel()
+        $SituacaoAnimalModel: SituacaoAnimalModel( temperatura > $rule.temperaturaAlta)
+        $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
+        $AnimalModel: AnimalModel()
+    then
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"temperatura Alta") );
+
+        // update($AnomaliaModelAgrupador);
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+end
+
+rule "Verifica temperatura baixa"
+no-loop true
+dialect "java"
+    when
+        $rule: RuleModel()
+        $SituacaoAnimalModel: SituacaoAnimalModel( temperatura < $rule.temperaturaBaixa)
+        $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
+        $AnimalModel: AnimalModel()
+    then
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(), $SituacaoAnimalModel.getId_situacao(),"temperatura Baixa") );
+
+        // update($AnomaliaModelAgrupador);
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+end
+
+//R5
+
+rule "Verificação de Presao arterial alta"
+no-loop true
+dialect "java"
+    when
+        $rule: RuleModel()
+        $SituacaoAnimalModel: SituacaoAnimalModel( presao_arterial_sistolica > $rule.presaoArterialSistolicaAlta || presao_arterial_diastolica > $rule.presaoArterialDiastolicaAlta)
+        $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
+        $AnimalModel: AnimalModel()
+    then
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"presao sistolica alta") );
+
+        // update($AnomaliaModelAgrupador);
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+end
+
+rule "Verificação de Presao arterial baixa"
+no-loop true
+dialect "java"
+    when
+        $rule: RuleModel()
+        $SituacaoAnimalModel: SituacaoAnimalModel( presao_arterial_sistolica < $rule.presaoArterialSistolicaBaixa || presao_arterial_diastolica > $rule.presaoArterialDiastolicaBaixa)
+        $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
+        $AnimalModel: AnimalModel()
+    then
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"presao sistolica baixa") );
+
+        // update($AnomaliaModelAgrupador);
+        System.out.println("\n" + drools.getRule().getName() + "\n");
+end
+//RF
+
+rule "Situacao Analisada"
+no-loop true
+dialect "java"
+    when
+		$SituacaoAnimalModel: SituacaoAnimalModel()
+	then
+	    modify($SituacaoAnimalModel){
+	        setSituacao_ja_analisada(true)
+	    };
+	    System.out.println("\n" + drools.getRule().getName() + "\n");
+	    drools.halt();
+end

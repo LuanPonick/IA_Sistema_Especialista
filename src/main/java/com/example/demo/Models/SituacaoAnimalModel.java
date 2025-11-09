@@ -1,5 +1,6 @@
 package com.example.demo.Models;
 
+import com.example.demo.repo.SituacaoAnimalRepo;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -27,7 +28,6 @@ public class SituacaoAnimalModel implements Serializable {
     private int presao_arterial_diastolica;
     private int temperatura;
     private boolean situacao_ja_analisada;
-
     public void setColeira_on(boolean b) {
         this.situacao_ja_analisada = b;
     }
