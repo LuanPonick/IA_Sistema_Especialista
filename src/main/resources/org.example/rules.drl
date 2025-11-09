@@ -116,7 +116,7 @@ dialect "java"
         $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
         $AnimalModel: AnimalModel()
     then
-        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"batimentos altos") );
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"batimentos altos") );
 
         //  update($AnomaliaModelAgrupador);
         System.out.println("\n" + drools.getRule().getName() + "\n");
@@ -131,7 +131,7 @@ dialect "java"
         $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
         $AnimalModel: AnimalModel()
     then
-        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"batimentos baixos") );
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"batimentos baixos") );
 
         // update($AnomaliaModelAgrupador);
         System.out.println("\n" + drools.getRule().getName() + "\n");
@@ -148,7 +148,7 @@ dialect "java"
         $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
         $AnimalModel: AnimalModel()
     then
-        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"temperatura Alta") );
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"temperatura Alta") );
 
         // update($AnomaliaModelAgrupador);
         System.out.println("\n" + drools.getRule().getName() + "\n");
@@ -163,7 +163,7 @@ dialect "java"
         $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
         $AnimalModel: AnimalModel()
     then
-        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(), $SituacaoAnimalModel.getId_situacao(),"temperatura Baixa") );
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(), $SituacaoAnimalModel.getIdSituacao(),"temperatura Baixa") );
 
         // update($AnomaliaModelAgrupador);
         System.out.println("\n" + drools.getRule().getName() + "\n");
@@ -180,7 +180,7 @@ dialect "java"
         $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
         $AnimalModel: AnimalModel()
     then
-        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"presao sistolica alta") );
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"presao sistolica alta") );
 
         // update($AnomaliaModelAgrupador);
         System.out.println("\n" + drools.getRule().getName() + "\n");
@@ -195,7 +195,7 @@ dialect "java"
         $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
         $AnimalModel: AnimalModel()
     then
-        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getId_situacao(),"presao sistolica baixa") );
+        $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"presao sistolica baixa") );
 
         // update($AnomaliaModelAgrupador);
         System.out.println("\n" + drools.getRule().getName() + "\n");

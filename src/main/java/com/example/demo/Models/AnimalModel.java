@@ -27,8 +27,8 @@ public class AnimalModel implements Serializable {
     private boolean coleira_on;
     private int porte;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "animal")
-    private Set<SituacaoAnimalModel> situacaoAnimal = new HashSet<>();
+    //@OneToMany(mappedBy = "animal")
+    //private Set<SituacaoAnimalModel> situacaoAnimal = new HashSet<>();
     private int maturidade;
 
     public boolean getColeira_on (){

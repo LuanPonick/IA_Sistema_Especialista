@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import jakarta.annotation.Resource;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @RestController
 public class APIcoleiraStarter {
 
@@ -30,22 +33,30 @@ public class APIcoleiraStarter {
     @PatchMapping("startdetection/{idColeira}")
         public ResponseEntity<Resource> updateResourcePartial(@PathVariable int idColeira) throws InterruptedException {
 
-
-
         AnimalModel animalModel = animalRepo.findAnimalModelBycoleiraid(idColeira);
-        SituacaoAnimalModel situacaoAnimalModel = situacaoAnimalRepo.findById(animalModel.getId_animal()).orElse(null);
-        AnomaliaModelAgrupador anomaliaModelAgrupador = new AnomaliaModelAgrupador();
-
-        RuleModel ruleModel = new RuleModel();
-
-        if (situacaoAnimalModel == null) {
+        if (animalModel == null){
             return ResponseEntity.notFound().build();
         }
+        animalModel.setColeira_on(true);
+        animalRepo.save(animalModel);
+
+        AnomaliaModelAgrupador anomaliaModelAgrupador = new AnomaliaModelAgrupador();
+        RuleModel ruleModel = new RuleModel();
+
         new Thread(() -> {
             try{
+                SituacaoAnimalModel situacaoAnimalModel;
+                Set<String> teste = new HashSet<>();
                 System.out.println("\n" + Thread.currentThread().getName() + "\n");
-                situacaoAnimalModel.setSituacao_ja_analisada(false);
+
                 do {
+                    situacaoAnimalModel = situacaoAnimalRepo.GetFirstSituacaoAnimalModelByanimalID(animalModel.getId_animal()).getLast();
+
+                    if(situacaoAnimalModel == null) {
+                        throw new InterruptedException("Nenhuma situacao cadastrada!!!");
+                    }
+                    teste.add(String.valueOf(situacaoAnimalModel.getIdSituacao()));
+
                     KieContainer kieContainer = KieServices.Factory.get().getKieClasspathContainer();
                     KieSession kieSession = kieContainer.newKieSession("session");
 
@@ -56,18 +67,24 @@ public class APIcoleiraStarter {
 
                     kieSession.fireAllRules();
                     System.out.println(anomaliaModelAgrupador.anomaliaModels.toString());
-                    Thread.sleep(5000);
                     System.out.println("--------------");
 
                     anomaliaRepo.saveAll(anomaliaModelAgrupador.anomaliaModels);
                     anomaliaModelAgrupador.anomaliaModels.clear();
                     situacaoAnimalRepo.save(situacaoAnimalModel);
+                    if(!animalModel.getColeira_on()){
+                        break;
+                    }
+                    Thread.sleep(2000);
+                }while (true);
+                System.out.println(teste.toString());
 
-                    situacaoAnimalModel.getId_situacao();
-                }while (animalModel.getColeira_on());
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                animalModel.setColeira_on(false);
+                animalRepo.save(animalModel);
             }
+
         }).start();
 
         return ResponseEntity.ok().build();
