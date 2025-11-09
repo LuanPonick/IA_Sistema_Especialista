@@ -4,6 +4,7 @@ import com.example.demo.Models.AnimalModel;
 import com.example.demo.Models.SituacaoAnimalModel;
 import com.example.demo.repo.AnimalRepo;
 import com.example.demo.repo.SituacaoAnimalRepo;
+import com.example.demo.service.EmailService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,9 @@ public class APIsituacaoAnimal {
 
     @GetMapping("/teste")
     public void teste(){
+        EmailService emailService = new EmailService();
 
+        emailService.enviar("teste", "teste", "luanponick07@gmail.com");
     }
 
     @PostMapping("situacaoAnimal/{idColeira}")
