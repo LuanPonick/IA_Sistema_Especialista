@@ -25,7 +25,7 @@ public class APIsituacaoAnimal {
 
         emailService.enviar("teste", "teste", "luanponick07@gmail.com");
     }
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("situacaoAnimal/{idColeira}")
     public ResponseEntity<Resource> createData(@PathVariable long idColeira, @RequestBody SituacaoAnimalModel situacaoAnimalModel){
         AnimalModel animalModel = animalRepo.findAnimalModelBycoleiraid(idColeira);

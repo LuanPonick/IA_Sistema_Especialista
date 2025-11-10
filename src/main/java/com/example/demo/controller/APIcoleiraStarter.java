@@ -9,6 +9,7 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ public class APIcoleiraStarter {
 
     @Autowired
     AnomaliaRepo anomaliaRepo;
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @PatchMapping("startdetection/{idColeira}")
         public ResponseEntity<Resource> updateResourcePartial(@PathVariable int idColeira) throws InterruptedException {
 
@@ -75,7 +76,7 @@ public class APIcoleiraStarter {
                     if(!animalModel.getColeira_on()){
                         break;
                     }
-                    Thread.sleep(2000);
+                    Thread.sleep(5000);
                 }while (true);
                 System.out.println(teste.toString());
 

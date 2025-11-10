@@ -60,8 +60,8 @@ dialect "java"
             setTemperaturaAlta(39),
             setPresaoArterialSistolicaAlta(140),
             setPresaoArterialSistolicaBaixa(90),
-            setPresaoArterialDiastolicaAlta(50),
-            setPresaoArterialDiastolicaBaixa(90)
+            setPresaoArterialDiastolicaAlta(90),
+            setPresaoArterialDiastolicaBaixa(50)
         };
         System.out.println("\n" + drools.getRule().getName() + "\n");
 end
@@ -80,8 +80,8 @@ dialect "java"
             setTemperaturaAlta(39),
             setPresaoArterialSistolicaAlta(140),
             setPresaoArterialSistolicaBaixa(90),
-            setPresaoArterialDiastolicaAlta(50),
-            setPresaoArterialDiastolicaBaixa(90)
+            setPresaoArterialDiastolicaAlta(90),
+            setPresaoArterialDiastolicaBaixa(50)
         };
         System.out.println("\n" + drools.getRule().getName() + "\n");
 end
@@ -100,8 +100,8 @@ dialect "java"
             setTemperaturaAlta(39),
             setPresaoArterialSistolicaAlta(140),
             setPresaoArterialSistolicaBaixa(90),
-            setPresaoArterialDiastolicaAlta(50),
-            setPresaoArterialDiastolicaBaixa(90)
+            setPresaoArterialDiastolicaAlta(90),
+            setPresaoArterialDiastolicaBaixa(50)
         };
         System.out.println("\n" + drools.getRule().getName() + "\n");
 end
@@ -191,13 +191,12 @@ no-loop true
 dialect "java"
     when
         $rule: RuleModel()
-        $SituacaoAnimalModel: SituacaoAnimalModel( presao_arterial_sistolica < $rule.presaoArterialSistolicaBaixa || presao_arterial_diastolica > $rule.presaoArterialDiastolicaBaixa)
+        $SituacaoAnimalModel: SituacaoAnimalModel( presao_arterial_sistolica < $rule.presaoArterialSistolicaBaixa || presao_arterial_diastolica < $rule.presaoArterialDiastolicaBaixa)
         $AnomaliaModelAgrupador: AnomaliaModelAgrupador()
         $AnimalModel: AnimalModel()
     then
         $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"presao sistolica baixa") );
 
-        // update($AnomaliaModelAgrupador);
         System.out.println("\n" + drools.getRule().getName() + "\n");
 end
 //RF
@@ -207,10 +206,12 @@ no-loop true
 dialect "java"
     when
 		$SituacaoAnimalModel: SituacaoAnimalModel()
+		$rule: RuleModel()
 	then
 	    modify($SituacaoAnimalModel){
 	        setSituacao_ja_analisada(true)
 	    };
 	    System.out.println("\n" + drools.getRule().getName() + "\n");
+	    setNumeroTentativas(0)
 	    drools.halt();
 end
