@@ -212,6 +212,6 @@ dialect "java"
 	        setSituacao_ja_analisada(true)
 	    };
 	    System.out.println("\n" + drools.getRule().getName() + "\n");
-	    setNumeroTentativas(0)
+	    $rule.setNumeroTentativas(0);
 	    drools.halt();
 end
