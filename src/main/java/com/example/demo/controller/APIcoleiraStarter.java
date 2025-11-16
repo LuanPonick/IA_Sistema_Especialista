@@ -53,9 +53,6 @@ public class APIcoleiraStarter {
                 do {
                     situacaoAnimalModel = situacaoAnimalRepo.GetFirstSituacaoAnimalModelByanimalID(animalModel.getId_animal()).getLast();
 
-                    if(situacaoAnimalModel == null) {
-                        throw new InterruptedException("Nenhuma situacao cadastrada!!!");
-                    }
                     teste.add(String.valueOf(situacaoAnimalModel.getIdSituacao()));
 
                     KieContainer kieContainer = KieServices.Factory.get().getKieClasspathContainer();
@@ -69,6 +66,7 @@ public class APIcoleiraStarter {
                     kieSession.fireAllRules();
                     System.out.println(anomaliaModelAgrupador.anomaliaModels.toString());
                     System.out.println("--------------");
+                    this.EnvioDeEmail(anomaliaModelAgrupador);
 
                     anomaliaRepo.saveAll(anomaliaModelAgrupador.anomaliaModels);
                     anomaliaModelAgrupador.anomaliaModels.clear();
@@ -89,5 +87,11 @@ public class APIcoleiraStarter {
         }).start();
 
         return ResponseEntity.ok().build();
+    }
+    private void EnvioDeEmail(AnomaliaModelAgrupador anomaliaModelAgrupador) {
+
+        System.out.println(" ---EnvioDeEmail--- ");
+        anomaliaModelAgrupador.getAnomaliaModels().forEach(System.out::println);
+        System.out.println(" ------------------ ");
     }
 }
