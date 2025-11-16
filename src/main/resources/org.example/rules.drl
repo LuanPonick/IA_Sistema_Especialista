@@ -17,7 +17,7 @@ dialect "java"
            setColeira_on(false)
         };
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
         drools.halt();
 end
@@ -33,7 +33,7 @@ dialect "java"
             setNumeroTentativas($RuleModel.getNumeroTentativas() + 1)
         };
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
         drools.halt();
 end
@@ -45,7 +45,7 @@ dialect "java"
 		$AnimalModel: AnimalModel(Coleira_on == false)
 	then
 	    // Dbug
-	    System.out.println("\n" + drools.getRule().getName() + "\n");
+	    System.out.println("Drools: " + drools.getRule().getName());
 	    // debug area #Dbugarea.
 	    drools.halt();
 end
@@ -70,7 +70,7 @@ dialect "java"
             setPresaoArterialDiastolicaBaixa(50)
         };
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // area #Dbugarea.
 end
 
@@ -92,7 +92,7 @@ dialect "java"
             setPresaoArterialDiastolicaBaixa(50)
         };
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
 end
 
@@ -115,7 +115,7 @@ dialect "java"
         };
 
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
 end
 
@@ -133,7 +133,7 @@ dialect "java"
 
         //  update($AnomaliaModelAgrupador);
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
 end
 
@@ -150,7 +150,7 @@ dialect "java"
 
         // update($AnomaliaModelAgrupador);
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
 end
 
@@ -170,7 +170,7 @@ dialect "java"
         // update($AnomaliaModelAgrupador);
 
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
 end
 
@@ -188,7 +188,7 @@ dialect "java"
         // update($AnomaliaModelAgrupador);
 
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
 end
 
@@ -208,7 +208,7 @@ dialect "java"
         // update($AnomaliaModelAgrupador);
 
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
 end
 
@@ -224,7 +224,7 @@ dialect "java"
         $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"presao sistolica baixa") );
 
         // Dbug
-        System.out.println("\n" + drools.getRule().getName() + "\n");
+        System.out.println("Drools: " + drools.getRule().getName());
         // debug area #Dbugarea.
 end
 //RF
@@ -242,7 +242,7 @@ dialect "java"
 	    $rule.setNumeroTentativas(0);
 
 	    // Dbug
-	    System.out.println("\n" + drools.getRule().getName() + "\n");
+	    System.out.println("Drools: " + drools.getRule().getName());
 	    // debug area #Dbugarea.
 
 	    drools.halt();
