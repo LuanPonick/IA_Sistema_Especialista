@@ -16,7 +16,9 @@ dialect "java"
         modify($AnimalModel) {
            setColeira_on(false)
         };
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
         drools.halt();
 end
 
@@ -30,7 +32,9 @@ dialect "java"
         modify($RuleModel) {
             setNumeroTentativas($RuleModel.getNumeroTentativas() + 1)
         };
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
         drools.halt();
 end
 
@@ -40,7 +44,9 @@ dialect "java"
 	when
 		$AnimalModel: AnimalModel(Coleira_on == false)
 	then
+	    // Dbug
 	    System.out.println("\n" + drools.getRule().getName() + "\n");
+	    // debug area #Dbugarea.
 	    drools.halt();
 end
 
@@ -63,7 +69,9 @@ dialect "java"
             setPresaoArterialDiastolicaAlta(90),
             setPresaoArterialDiastolicaBaixa(50)
         };
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // area #Dbugarea.
 end
 
 rule "Animal de pequeno porte"
@@ -83,7 +91,9 @@ dialect "java"
             setPresaoArterialDiastolicaAlta(90),
             setPresaoArterialDiastolicaBaixa(50)
         };
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
 end
 
 rule "Animal de medio e grande porte"
@@ -103,7 +113,10 @@ dialect "java"
             setPresaoArterialDiastolicaAlta(90),
             setPresaoArterialDiastolicaBaixa(50)
         };
+
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
 end
 
 //R3
@@ -119,7 +132,9 @@ dialect "java"
         $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"batimentos altos") );
 
         //  update($AnomaliaModelAgrupador);
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
 end
 
 rule "Verificação de batimentos cardíacos baixos"
@@ -134,7 +149,9 @@ dialect "java"
         $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"batimentos baixos") );
 
         // update($AnomaliaModelAgrupador);
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
 end
 
 //R4
@@ -151,7 +168,10 @@ dialect "java"
         $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"temperatura Alta") );
 
         // update($AnomaliaModelAgrupador);
+
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
 end
 
 rule "Verifica temperatura baixa"
@@ -166,7 +186,10 @@ dialect "java"
         $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(), $SituacaoAnimalModel.getIdSituacao(),"temperatura Baixa") );
 
         // update($AnomaliaModelAgrupador);
+
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
 end
 
 //R5
@@ -183,7 +206,10 @@ dialect "java"
         $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"presao sistolica alta") );
 
         // update($AnomaliaModelAgrupador);
+
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
 end
 
 rule "Verificação de Presao arterial baixa"
@@ -197,7 +223,9 @@ dialect "java"
     then
         $AnomaliaModelAgrupador.anomaliaModels.add( new AnomaliaModel($AnimalModel.getId_animal(),$SituacaoAnimalModel.getIdSituacao(),"presao sistolica baixa") );
 
+        // Dbug
         System.out.println("\n" + drools.getRule().getName() + "\n");
+        // debug area #Dbugarea.
 end
 //RF
 
@@ -211,7 +239,11 @@ dialect "java"
 	    modify($SituacaoAnimalModel){
 	        setSituacao_ja_analisada(true)
 	    };
-	    System.out.println("\n" + drools.getRule().getName() + "\n");
 	    $rule.setNumeroTentativas(0);
+
+	    // Dbug
+	    System.out.println("\n" + drools.getRule().getName() + "\n");
+	    // debug area #Dbugarea.
+
 	    drools.halt();
 end
