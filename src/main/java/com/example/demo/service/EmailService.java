@@ -3,18 +3,21 @@ package com.example.demo.service;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.stereotype.Service;
 
 import java.util.Properties;
 
 public class EmailService {
-    private final String ADDRESS_FROM = "luanponick07@gmail.com";
-    private final String PERSONAL_NAME = "teste";
+    private final String ADDRESS_FROM = "HDA";
+    private String PERSONAL_NAME = "HDA ";
     private final String USERNAME = "luanponick07@gmail.com";
     private String password;
 
-    public void enviar(String subject, String messageText, String address) {
+    public void enviar(String subject, String messageText, String address, boolean eAnomalia) {
+
+        this.PERSONAL_NAME += eAnomalia ? "Emergecia" : "Alertas";
+
         password = "";
+
         try {
             Properties properties = new Properties();
             properties.put("mail.smtp.ssl.trust", "*");

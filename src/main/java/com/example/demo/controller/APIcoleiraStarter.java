@@ -4,6 +4,7 @@ import com.example.demo.Models.*;
 import com.example.demo.repo.AnimalRepo;
 import com.example.demo.repo.AnomaliaRepo;
 import com.example.demo.repo.SituacaoAnimalRepo;
+import com.example.demo.service.EmailService;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -18,6 +19,7 @@ import jakarta.annotation.Resource;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 public class APIcoleiraStarter {
@@ -49,6 +51,7 @@ public class APIcoleiraStarter {
                 SituacaoAnimalModel situacaoAnimalModel;
                 Set<String> teste = new HashSet<>();
                 System.out.println("\n" + Thread.currentThread().getName() + "\n");
+                String emailTutor = animalModel.getEmail_tutor();
 
                 do {
                     situacaoAnimalModel = situacaoAnimalRepo.GetFirstSituacaoAnimalModelByanimalID(animalModel.getId_animal()).getLast();
@@ -64,9 +67,11 @@ public class APIcoleiraStarter {
                     kieSession.insert(ruleModel);
 
                     kieSession.fireAllRules();
-                    System.out.println(anomaliaModelAgrupador.anomaliaModels.toString());
-                    System.out.println("--------------");
-                    this.EnvioDeEmail(anomaliaModelAgrupador);
+                    // System.out.println(anomaliaModelAgrupador.anomaliaModels.toString());
+                    // System.out.println("--------------");
+                    if (!anomaliaModelAgrupador.getAnomaliaModels().isEmpty()) {
+                        this.EnvioDeEmail(anomaliaModelAgrupador, emailTutor);
+                    }
 
                     anomaliaRepo.saveAll(anomaliaModelAgrupador.anomaliaModels);
                     anomaliaModelAgrupador.anomaliaModels.clear();
@@ -76,7 +81,7 @@ public class APIcoleiraStarter {
                     }
                     Thread.sleep(5000);
                 }while (true);
-                System.out.println(teste.toString());
+                // System.out.println(teste.toString());
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -88,10 +93,19 @@ public class APIcoleiraStarter {
 
         return ResponseEntity.ok().build();
     }
-    private void EnvioDeEmail(AnomaliaModelAgrupador anomaliaModelAgrupador) {
+    @CrossOrigin(origins = "http://localhost:5173")
+    private void EnvioDeEmail(AnomaliaModelAgrupador anomaliaModelAgrupador, String emailTutor) {
+        EmailService emailService = new EmailService();
+        String corpoMensagem = anomaliaModelAgrupador.getAnomaliaModels().stream().map(AnomaliaModel -> AnomaliaModel.getDescricao_anomalia() + "<BR>").collect(Collectors.joining());
+        corpoMensagem += "HDA Ajuda em monitoramento animal";
 
         System.out.println(" ---EnvioDeEmail--- ");
-        anomaliaModelAgrupador.getAnomaliaModels().forEach(System.out::println);
+
+        //  anomaliaModelAgrupador.getAnomaliaModels().forEach(System.out::println);
+        System.out.println(corpoMensagem);
+
+        emailService.enviar("Informe de anomalia", corpoMensagem, emailTutor, true);
+
         System.out.println(" ------------------ ");
     }
 }

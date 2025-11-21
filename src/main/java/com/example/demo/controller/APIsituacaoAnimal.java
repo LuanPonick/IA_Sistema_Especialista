@@ -21,15 +21,14 @@ public class APIsituacaoAnimal {
 
     @GetMapping("/teste")
     public void teste(){
-        EmailService emailService = new EmailService();
+        EmailService emailService = new EmailService( );
 
-        emailService.enviar("teste", "teste", "luanponick07@gmail.com");
+        emailService.enviar("texto padrao!!!", "seu animal esta morto \uD83D\uDE0A", "luanponick.sz@gmail.com", true);
     }
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("situacaoAnimal/{idColeira}")
     public ResponseEntity<Resource> createData(@PathVariable long idColeira, @RequestBody SituacaoAnimalModel situacaoAnimalModel){
         AnimalModel animalModel = animalRepo.findAnimalModelBycoleiraid(idColeira);
-
 
         System.out.println(situacaoAnimalModel);
         if (animalModel == null){
